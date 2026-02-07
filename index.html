@@ -19,7 +19,7 @@
 
     .card {
       background: white;
-      padding: 35px;
+      padding: 30px 25px;
       border-radius: 25px;
       text-align: center;
       width: 100%;
@@ -94,7 +94,6 @@
       100% { transform: translateY(0); }
     }
 
-    /* Surprise section */
     .surprise img {
       width: 100%;
       border-radius: 15px;
@@ -109,14 +108,26 @@
     /* Mobile adjustments */
     @media (max-width: 400px) {
       .card {
-        padding: 25px;
+        padding: 20px;
       }
       h1 {
         font-size: 1.3em;
       }
+      p {
+        font-size: 14px;
+      }
       button {
         font-size: 14px;
         padding: 10px 18px;
+      }
+      #yes, #no {
+        position: static; /* stack buttons vertically */
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+      }
+      .buttons {
+        height: auto;
       }
       .heart {
         font-size: 28px;
@@ -128,7 +139,6 @@
 
   <div class="card">
     <h1>Hi Dolly, Will you be my Valentine? 💖</h1>
-    <!-- Updated paragraph on the first page -->
     <p>I promise to cherish you more, showering you with the love and words you deserve in the coming years</p>
 
     <div class="buttons">
@@ -138,7 +148,6 @@
 
     <div id="result" class="hidden">
       <h2>YAYYY 💘</h2>
-      <!-- Kept the original promise in the game -->
       <p>I promise unlimited love, coffee & Momos 😌</p>
       <p>Catch 5 hearts to unlock your surprise 👇</p>
       <div class="game" id="game"></div>
@@ -160,21 +169,23 @@
     const noBtn = document.getElementById("no");
     const card = document.querySelector('.card');
 
-    noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("click", moveNo);
-
+    // Only move NO button on large screens
     function moveNo() {
+      if (window.innerWidth <= 400) return; // do not move on small screens
+
       const cardRect = card.getBoundingClientRect();
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
-      // Random x and y inside the card
       const x = Math.random() * (cardRect.width - btnWidth);
-      const y = Math.random() * (cardRect.height - btnHeight - 80) + 40; // avoid top & bottom edges
+      const y = Math.random() * (cardRect.height - btnHeight - 80) + 40;
 
       noBtn.style.left = `${x}px`;
       noBtn.style.top = `${y}px`;
     }
+
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("click", moveNo);
 
     function sayYes() {
       document.querySelector(".buttons").style.display = "none";
