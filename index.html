@@ -1,18 +1,190 @@
-const noBtn = document.getElementById("no");
-noBtn.addEventListener("mouseover", moveNo);
-noBtn.addEventListener("click", moveNo);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Valentine ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
 
-function moveNo() {
-  const card = document.querySelector('.card');
-  const cardRect = card.getBoundingClientRect();
+    .card {
+      background: white;
+      padding: 35px;
+      border-radius: 25px;
+      text-align: center;
+      width: 340px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
 
-  const btnWidth = noBtn.offsetWidth;
-  const btnHeight = noBtn.offsetHeight;
+    h1 {
+      color: #ff4d6d;
+      margin-bottom: 10px;
+    }
 
-  // Random x and y inside the card boundaries
-  const x = Math.random() * (cardRect.width - btnWidth);
-  const y = Math.random() * (cardRect.height - btnHeight - 100) + 50; // keep some margin
+    p {
+      color: #555;
+    }
 
-  noBtn.style.left = `${x}px`;
-  noBtn.style.top = `${y}px`;
-}
+    .buttons {
+      margin-top: 20px;
+      position: relative;
+      height: 60px;
+    }
+
+    button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #yes {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    #yes:hover {
+      transform: scale(1.1);
+    }
+
+    #no {
+      background: #ccc;
+      color: #333;
+      position: absolute;
+      right: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .game {
+      margin-top: 20px;
+      position: relative;
+      height: 120px;
+    }
+
+    .heart {
+      font-size: 35px;
+      cursor: pointer;
+      animation: float 1.5s infinite;
+      position: absolute;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    /* Surprise section */
+    .surprise img {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    .surprise h2 {
+      color: #ff4d6d;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Hi Dolly, Will you be my Valentine? 💖</h1>
+    <!-- Updated paragraph on the first page -->
+    <p>I promise to cherish you more, showering you with the love and words you deserve in the coming years</p>
+
+    <div class="buttons">
+      <button id="yes" onclick="sayYes()">YES 💕</button>
+      <button id="no">NO 🙄</button>
+    </div>
+
+    <div id="result" class="hidden">
+      <h2>YAYYY 💘</h2>
+      <!-- Kept the original promise in the game -->
+      <p>I promise unlimited love, coffee & Momos 😌</p>
+      <p>Catch 5 hearts to unlock your surprise 👇</p>
+      <div class="game" id="game"></div>
+      <p id="score">Hearts: 0 / 5</p>
+    </div>
+
+    <div id="surprise" class="hidden surprise">
+      <h2>You unlocked my heart ❤️</h2>
+      <p>
+        Every moment with you is my favorite one.<br>
+        I’m so lucky to call you mine 💕
+      </p>
+      <img src="IMG_3400.jpeg" alt="Us ❤️">
+      <p>Happy Valentine’s Week 😘</p>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("click", moveNo);
+
+    function moveNo() {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 100 - 50;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    function sayYes() {
+      document.querySelector(".buttons").style.display = "none";
+      document.getElementById("result").classList.remove("hidden");
+      startGame();
+    }
+
+    let score = 0;
+
+    function startGame() {
+      const game = document.getElementById("game");
+
+      const interval = setInterval(() => {
+        if (score >= 5) {
+          clearInterval(interval);
+          showSurprise();
+          return;
+        }
+
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+
+        heart.style.left = Math.random() * 260 + "px";
+        heart.style.top = Math.random() * 80 + "px";
+
+        heart.onclick = () => {
+          score++;
+          document.getElementById("score").innerText = `Hearts: ${score} / 5`;
+          heart.remove();
+        };
+
+        game.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 2500);
+      }, 800);
+    }
+
+    function showSurprise() {
+      document.getElementById("result").classList.add("hidden");
+      document.getElementById("surprise").classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
